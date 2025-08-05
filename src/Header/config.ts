@@ -10,14 +10,15 @@ export const Header: GlobalConfig = {
   },
   fields: [
     {
+      name: 'logoKabinet',
+      type: 'upload',
+      relationTo: 'media',
+    },
+    {
       name: 'navItems',
       type: 'array',
-      fields: [
-        link({
-          appearances: false,
-        }),
-      ],
-      maxRows: 6,
+      fields: [link()],
+      maxRows: 7,
       admin: {
         initCollapsed: true,
         components: {

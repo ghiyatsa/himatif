@@ -24,6 +24,10 @@ export const hero: Field = {
           value: 'none',
         },
         {
+          label: 'Landing',
+          value: 'landing',
+        },
+        {
           label: 'High Impact',
           value: 'highImpact',
         },
@@ -39,6 +43,33 @@ export const hero: Field = {
       required: true,
     },
     {
+      name: 'badge',
+      type: 'text',
+      required: true,
+      admin: {
+        placeholder: 'Badge',
+        condition: (_, { type } = {}) => ['landing'].includes(type),
+      },
+    },
+    {
+      name: 'title',
+      type: 'text',
+      required: true,
+      admin: {
+        placeholder: 'Title',
+        condition: (_, { type } = {}) => ['landing'].includes(type),
+      },
+    },
+    {
+      name: 'subTitle',
+      type: 'textarea',
+      required: true,
+      admin: {
+        placeholder: 'Subtitle',
+        condition: (_, { type } = {}) => ['landing'].includes(type),
+      },
+    },
+    {
       name: 'richText',
       type: 'richText',
       editor: lexicalEditor({
@@ -51,6 +82,9 @@ export const hero: Field = {
           ]
         },
       }),
+      admin: {
+        condition: (_, { type } = {}) => !['landing'].includes(type),
+      },
       label: false,
     },
     linkGroup({

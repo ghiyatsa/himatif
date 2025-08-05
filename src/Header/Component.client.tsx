@@ -8,6 +8,11 @@ import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
 import { HeaderNav } from './Nav'
+import { Button } from '@/components/ui/button'
+import { Media } from '@/components/Media'
+import { SearchIcon } from 'lucide-react'
+import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
+import { Separator } from '@/components/ui/separator'
 
 interface HeaderClientProps {
   data: Header
@@ -30,12 +35,39 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-8 flex justify-between">
-        <Link href="/">
-          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
-        </Link>
-        <HeaderNav data={data} />
+    <header
+      className="flex items-center h-16 fixed w-full top-0 bg-background/90 backdrop-blur-md z-20"
+      {...(theme ? { 'data-theme': theme } : {})}
+    >
+      <div className="px-6 flex justify-between w-full h-full items-center">
+        <div className="flex items-center gap-4">
+          <Link href="/" className="flex items-center gap-2">
+            <div>
+              <Logo loading="eager" priority="high" />
+            </div>
+            <div>
+              {data.logoKabinet && typeof data.logoKabinet === 'object' && (
+                <Media
+                  imgClassName="w-full h-8.5"
+                  priority
+                  resource={data.logoKabinet}
+                  placeholder="empty"
+                />
+              )}
+            </div>
+          </Link>
+          <HeaderNav data={data} />
+        </div>
+        <div className="flex items-center gap-2">
+          <Link href={'/search'}>
+            <Button size={'sm'} className="bg-card mx-3" variant={'surface'}>
+              <SearchIcon />
+              <span className="hidden lg:inline-flex">Search...</span>
+            </Button>
+          </Link>
+          <Separator orientation="vertical" className="h-4!" />
+          <ThemeSelector />
+        </div>
       </div>
     </header>
   )

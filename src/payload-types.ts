@@ -149,7 +149,10 @@ export interface Page {
   id: string;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'landing' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    badge?: string | null;
+    title?: string | null;
+    subTitle?: string | null;
     richText?: {
       root: {
         type: string;
@@ -184,7 +187,7 @@ export interface Page {
             /**
              * Choose how the link should be rendered.
              */
-            appearance?: ('default' | 'outline') | null;
+            appearance?: ('default' | 'ghost' | 'outline' | 'link') | null;
           };
           id?: string | null;
         }[]
@@ -383,6 +386,13 @@ export interface User {
   hash?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
   password?: string | null;
 }
 /**
@@ -424,7 +434,7 @@ export interface CallToActionBlock {
           /**
            * Choose how the link should be rendered.
            */
-          appearance?: ('default' | 'outline') | null;
+          appearance?: ('default' | 'ghost' | 'outline' | 'link') | null;
         };
         id?: string | null;
       }[]
@@ -474,7 +484,7 @@ export interface ContentBlock {
           /**
            * Choose how the link should be rendered.
            */
-          appearance?: ('default' | 'outline') | null;
+          appearance?: ('default' | 'ghost' | 'outline' | 'link') | null;
         };
         id?: string | null;
       }[]
@@ -992,6 +1002,9 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         type?: T;
+        badge?: T;
+        title?: T;
+        subTitle?: T;
         richText?: T;
         links?:
           | T
@@ -1276,6 +1289,13 @@ export interface UsersSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1538,6 +1558,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: string;
+  logoKabinet?: (string | null) | Media;
   navItems?:
     | {
         link: {
@@ -1554,6 +1575,10 @@ export interface Header {
               } | null);
           url?: string | null;
           label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'ghost' | 'outline' | 'link') | null;
         };
         id?: string | null;
       }[]
@@ -1583,6 +1608,10 @@ export interface Footer {
               } | null);
           url?: string | null;
           label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'ghost' | 'outline' | 'link') | null;
         };
         id?: string | null;
       }[]
@@ -1595,6 +1624,7 @@ export interface Footer {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  logoKabinet?: T;
   navItems?:
     | T
     | {
@@ -1606,6 +1636,7 @@ export interface HeaderSelect<T extends boolean = true> {
               reference?: T;
               url?: T;
               label?: T;
+              appearance?: T;
             };
         id?: T;
       };
@@ -1629,6 +1660,7 @@ export interface FooterSelect<T extends boolean = true> {
               reference?: T;
               url?: T;
               label?: T;
+              appearance?: T;
             };
         id?: T;
       };

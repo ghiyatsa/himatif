@@ -2,26 +2,30 @@ import type { Field, GroupField } from 'payload'
 
 import deepMerge from '@/utilities/deepMerge'
 
-export type LinkAppearances = 'default' | 'outline'
+export type LinkAppearances = 'default' | 'ghost' | 'outline' | 'link'
 
 export const appearanceOptions: Record<LinkAppearances, { label: string; value: string }> = {
   default: {
     label: 'Default',
     value: 'default',
   },
+  ghost: {
+    label: 'Ghost',
+    value: 'ghost',
+  },
   outline: {
     label: 'Outline',
     value: 'outline',
   },
+  link: {
+    label: 'Link',
+    value: 'link',
+  },
 }
 
-type LinkType = (options?: {
-  appearances?: LinkAppearances[] | false
-  disableLabel?: boolean
-  overrides?: Partial<GroupField>
-}) => Field
+type LinkType = (options?: { disableLabel?: boolean; overrides?: Partial<GroupField> }) => Field
 
-export const link: LinkType = ({ appearances, disableLabel = false, overrides = {} } = {}) => {
+export const link: LinkType = ({ disableLabel = false, overrides = {} } = {}) => {
   const linkResult: GroupField = {
     name: 'link',
     type: 'group',
@@ -117,23 +121,20 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
     linkResult.fields = [...linkResult.fields, ...linkTypes]
   }
 
-  if (appearances !== false) {
-    let appearanceOptionsToUse = [appearanceOptions.default, appearanceOptions.outline]
-
-    if (appearances) {
-      appearanceOptionsToUse = appearances.map((appearance) => appearanceOptions[appearance])
-    }
-
-    linkResult.fields.push({
-      name: 'appearance',
-      type: 'select',
-      admin: {
-        description: 'Choose how the link should be rendered.',
-      },
-      defaultValue: 'default',
-      options: appearanceOptionsToUse,
-    })
-  }
+  linkResult.fields.push({
+    name: 'appearance',
+    type: 'select',
+    admin: {
+      description: 'Choose how the link should be rendered.',
+    },
+    defaultValue: 'default',
+    options: [
+      appearanceOptions.default,
+      appearanceOptions.ghost,
+      appearanceOptions.outline,
+      appearanceOptions.link,
+    ],
+  })
 
   return deepMerge(linkResult, overrides)
 }
