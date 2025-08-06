@@ -10,15 +10,11 @@ type LinkGroupType = (options?: {
   overrides?: Partial<ArrayField>
 }) => Field
 
-export const linkGroup: LinkGroupType = ({ appearances, overrides = {} } = {}) => {
+export const linkGroup: LinkGroupType = ({ overrides = {} } = {}) => {
   const generatedLinkGroup: Field = {
     name: 'links',
     type: 'array',
-    fields: [
-      link({
-        appearances,
-      }),
-    ],
+    fields: [link({})],
     admin: {
       initCollapsed: true,
     },

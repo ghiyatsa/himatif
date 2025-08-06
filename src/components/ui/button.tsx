@@ -26,6 +26,7 @@ const buttonVariants = cva(
         outline: 'border border-border bg-background hover:bg-card hover:text-accent-foreground',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         surface: 'bg-surface text-surface-foreground hover:bg-surface/90',
+        star: 'bg-accent text-accent-foreground',
       },
     },
   },
@@ -35,19 +36,75 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  classNames?: {
+    content?: string
+  }
   ref?: React.Ref<HTMLButtonElement>
+  starColor?: string
+  starSpeed?: React.CSSProperties['animationDuration']
+  starThickness?: number
 }
 
 const Button: React.FC<ButtonProps> = ({
   asChild = false,
   className,
+  classNames,
   size,
   variant,
   ref,
+  children,
+  starColor = 'white',
+  starSpeed = '6s',
+  starThickness = 0.8,
   ...props
 }) => {
   const Comp = asChild ? Slot : 'button'
-  return <Comp className={cn(buttonVariants({ className, size, variant }))} ref={ref} {...props} />
+
+  if (variant === 'star') {
+    return (
+      <Comp
+        className={cn('relative inline-block overflow-hidden rounded-lg cursor-pointer', className)}
+        ref={ref}
+        {...props}
+        style={{
+          padding: `${starThickness}px 0`,
+          ...props.style,
+        }}
+      >
+        <span>
+          <div
+            className="absolute w-[300%] h-[50%] opacity-70 bottom-[-14px] right-[-250%] rounded-full animate-star-movement-bottom z-0"
+            style={{
+              background: `radial-gradient(circle, ${starColor}, transparent 10%)`,
+              animationDuration: starSpeed,
+            }}
+          />
+          <div
+            className="absolute w-[300%] h-[50%] opacity-70 top-[-12px] left-[-250%] rounded-full animate-star-movement-top z-0"
+            style={{
+              background: `radial-gradient(circle, ${starColor}, transparent 10%)`,
+              animationDuration: starSpeed,
+            }}
+          />
+          <div
+            className={cn(
+              buttonVariants({ variant, size }),
+              'relative z-1 bg-surface py-1 px-3 rounded-lg',
+              classNames?.content,
+            )}
+          >
+            {children}
+          </div>
+        </span>
+      </Comp>
+    )
+  }
+
+  return (
+    <Comp className={cn(buttonVariants({ className, size, variant }))} ref={ref} {...props}>
+      {children}
+    </Comp>
+  )
 }
 
 export { Button, buttonVariants }
