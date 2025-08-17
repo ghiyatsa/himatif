@@ -12,7 +12,7 @@ interface LogoLinkProps {
 
 export const LogoLink: React.FC<LogoLinkProps> = ({ data }) => {
   return (
-    <Link href="/" className="flex items-center gap-4">
+    <Link href="/" className="flex items-center gap-2 ml-2">
       <div>
         <Logo loading="eager" priority="high" />
       </div>
@@ -25,6 +25,10 @@ export const LogoLink: React.FC<LogoLinkProps> = ({ data }) => {
             placeholder="empty"
           />
         )}
+      </div>
+      <div className="xl:flex flex-col lg:hidden flex -space-y-1">
+        <span className="font-bold text-[14px] lg:text-base">HIMATIF UNIMAL</span>
+        <span className="lg:text-xs text-[10px] text-muted-foreground">Kabinet Reugam</span>
       </div>
     </Link>
   )

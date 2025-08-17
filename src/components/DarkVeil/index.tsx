@@ -17,6 +17,8 @@ uniform float uNoise;
 uniform float uScan;
 uniform float uScanFreq;
 uniform float uWarp;
+uniform float uTheme; // 0.0 for dark, 1.0 for light
+
 #define iTime uTime
 #define iResolution uResolution
 
@@ -69,11 +71,21 @@ void main(){
     float scanline_val=sin(gl_FragCoord.y*uScanFreq)*0.5+0.5;
     col.rgb*=1.-(scanline_val*scanline_val)*uScan;
     col.rgb+=(rand(gl_FragCoord.xy+uTime)-0.5)*uNoise;
-    gl_FragColor=vec4(clamp(col.rgb,0.0,1.0),1.0);
+    vec3 pre_theme_col = clamp(col.rgb, 0.0, 1.0);
+    vec3 final_col = pre_theme_col;
+
+    if (uTheme == 1.0) {
+      final_col = 1.0 - final_col;
+    }
+
+    float alpha = (pre_theme_col.r + pre_theme_col.g + pre_theme_col.b) / 3.0;
+
+    gl_FragColor=vec4(final_col, alpha);
 }
 `
 
 type Props = {
+  theme?: string
   hueShift?: number
   noiseIntensity?: number
   scanlineIntensity?: number
@@ -84,6 +96,7 @@ type Props = {
 }
 
 export default function DarkVeil({
+  theme = 'dark',
   hueShift = 0,
   noiseIntensity = 0,
   scanlineIntensity = 0,
@@ -100,6 +113,7 @@ export default function DarkVeil({
     const renderer = new Renderer({
       dpr: Math.min(window.devicePixelRatio, 2),
       canvas,
+      alpha: true,
     })
 
     const gl = renderer.gl
@@ -111,6 +125,7 @@ export default function DarkVeil({
       uniforms: {
         uTime: { value: 0 },
         uResolution: { value: new Vec2() },
+        uTheme: { value: theme === 'light' ? 1.0 : 0.0 },
         uHueShift: { value: hueShift },
         uNoise: { value: noiseIntensity },
         uScan: { value: scanlineIntensity },
@@ -136,6 +151,7 @@ export default function DarkVeil({
 
     const loop = () => {
       program.uniforms.uTime.value = ((performance.now() - start) / 1000) * speed
+      program.uniforms.uTheme.value = theme === 'light' ? 1.0 : 0.0
       program.uniforms.uHueShift.value = hueShift
       program.uniforms.uNoise.value = noiseIntensity
       program.uniforms.uScan.value = scanlineIntensity
@@ -152,6 +168,7 @@ export default function DarkVeil({
       window.removeEventListener('resize', resize)
     }
   }, [
+    theme,
     hueShift,
     noiseIntensity,
     scanlineIntensity,

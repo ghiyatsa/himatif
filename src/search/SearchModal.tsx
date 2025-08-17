@@ -1,51 +1,98 @@
-import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { SearchIcon } from 'lucide-react'
+'use client'
 
-export function SearchModal() {
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { SearchIcon } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { searchPosts } from './actions'
+import type { Post } from '@/payload-types'
+import { useDebounce } from '@/utilities/useDebounce'
+import { Loader2 } from 'lucide-react'
+import { Separator } from '@/components/ui/separator'
+import { CMSLink } from '@/components/Link'
+import { motion } from 'motion/react'
+
+export const SearchModal = () => {
+  const [value, setValue] = useState('')
+  const [results, setResults] = useState<Post[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const debouncedValue = useDebounce(value, 500)
+
+  useEffect(() => {
+    const doSearch = async () => {
+      setIsLoading(true)
+      const searchResults = await searchPosts(debouncedValue)
+      setResults(searchResults)
+      setIsLoading(false)
+    }
+    doSearch()
+  }, [debouncedValue])
+
   return (
     <Dialog>
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+        }}
+      >
         <DialogTrigger asChild>
-          <Button size={'sm'} className="bg-card mx-3" variant={'surface'}>
+          <Button
+            className="lg:mx-2 lg:h-8 lg:px-3 lg:w-max h-8 w-8 mr-1 border border-border"
+            variant={'ghost'}
+          >
             <SearchIcon />
             <span className="hidden lg:inline-flex">Search...</span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you&apos;re done.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4">
-            <div className="grid gap-3">
-              <Label htmlFor="name-1">Name</Label>
-              <Input id="name-1" name="name" defaultValue="Pedro Duarte" />
+        <DialogContent
+          className="xl:min-w-xl top-16 translate-y-0 data-[state=open]:translate-y-0"
+          showCloseButton={false}
+        >
+          <DialogTitle className="sr-only">Search</DialogTitle>
+          <div>
+            <div className="flex items-center gap-2">
+              <SearchIcon className="text-muted-foreground size-5" />
+              <Input
+                onChange={(event) => {
+                  setValue(event.target.value)
+                }}
+                name="query"
+                placeholder="Search..."
+                className="rounded-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-base text-base pl-0"
+                autoComplete="off"
+              />
             </div>
-            <div className="grid gap-3">
-              <Label htmlFor="username-1">Username</Label>
-              <Input id="username-1" name="username" defaultValue="@peduarte" />
-            </div>
+            {value.length > 0 && (
+              <div className="overflow-y-auto space-y-4 mt-4">
+                <Separator />
+                {isLoading && results.length === 0 && (
+                  <div className="flex justify-center items-center h-full">
+                    <Loader2 className="animate-spin" />
+                  </div>
+                )}
+                {!isLoading && results.length > 0 ? (
+                  <div className="flex flex-col">
+                    {results.map((post) => (
+                      <CMSLink
+                        key={post.id}
+                        url={post.slug}
+                        appearance={'ghost'}
+                        className={{ button: 'justify-start' }}
+                        size={'search'}
+                      >
+                        {post.title}
+                      </CMSLink>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex justify-center items-center h-full">
+                    <p>No results found.</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-            <Button type="submit">Save changes</Button>
-          </DialogFooter>
         </DialogContent>
       </form>
     </Dialog>

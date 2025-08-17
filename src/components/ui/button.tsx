@@ -17,12 +17,13 @@ const buttonVariants = cva(
         icon: 'size-8 rounded-md',
         lg: 'h-10 rounded-md px-8',
         sm: 'h-8 rounded-md px-3',
+        search: 'py-4 px-4',
       },
       variant: {
         default: 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
-        link: 'text-primary items-start justify-start underline-offset-4 hover:underline',
+        link: 'text-foreground',
         outline: 'border border-border bg-background hover:bg-card hover:text-accent-foreground',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         surface: 'bg-surface text-surface-foreground hover:bg-surface/90',
@@ -73,14 +74,14 @@ const Button: React.FC<ButtonProps> = ({
       >
         <span>
           <div
-            className="absolute w-[300%] h-[50%] opacity-70 bottom-[-14px] right-[-250%] rounded-full animate-star-movement-bottom z-0"
+            className="absolute w-[300%] h-[50%] opacity-70 bottom-[-11px] right-[-250%] rounded-full animate-star-movement-bottom z-0"
             style={{
               background: `radial-gradient(circle, ${starColor}, transparent 10%)`,
               animationDuration: starSpeed,
             }}
           />
           <div
-            className="absolute w-[300%] h-[50%] opacity-70 top-[-12px] left-[-250%] rounded-full animate-star-movement-top z-0"
+            className="absolute w-[300%] h-[50%] opacity-70 top-[-10px] left-[-250%] rounded-full animate-star-movement-top z-0"
             style={{
               background: `radial-gradient(circle, ${starColor}, transparent 10%)`,
               animationDuration: starSpeed,
@@ -89,7 +90,7 @@ const Button: React.FC<ButtonProps> = ({
           <div
             className={cn(
               buttonVariants({ variant, size }),
-              'relative z-1 bg-surface py-1 px-3 rounded-lg',
+              'relative z-1 bg-surface rounded-lg',
               classNames?.content,
             )}
           >

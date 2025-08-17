@@ -24,8 +24,8 @@ export const hero: Field = {
           value: 'none',
         },
         {
-          label: 'Landing',
-          value: 'landing',
+          label: 'Landing Hero',
+          value: 'landingHero',
         },
         {
           label: 'High Impact',
@@ -43,30 +43,30 @@ export const hero: Field = {
       required: true,
     },
     {
-      name: 'badge',
+      label: 'Landing Badge',
+      name: 'landingBadge',
       type: 'text',
       required: true,
       admin: {
-        placeholder: 'Badge',
-        condition: (_, { type } = {}) => ['landing'].includes(type),
+        condition: (_, { type } = {}) => ['landingHero'].includes(type),
       },
     },
     {
-      name: 'title',
+      label: 'Landing Title',
+      name: 'landingTitle',
       type: 'text',
       required: true,
       admin: {
-        placeholder: 'Title',
-        condition: (_, { type } = {}) => ['landing'].includes(type),
+        condition: (_, { type } = {}) => ['landingHero'].includes(type),
       },
     },
     {
-      name: 'subTitle',
-      type: 'textarea',
+      label: 'Landing Subtitle',
+      name: 'landingSubtitle',
+      type: 'text',
       required: true,
       admin: {
-        placeholder: 'Subtitle',
-        condition: (_, { type } = {}) => ['landing'].includes(type),
+        condition: (_, { type } = {}) => ['landingHero'].includes(type),
       },
     },
     {
@@ -83,7 +83,7 @@ export const hero: Field = {
         },
       }),
       admin: {
-        condition: (_, { type } = {}) => !['landing'].includes(type),
+        condition: (_, { type } = {}) => !['landingHero'].includes(type),
       },
       label: false,
     },
@@ -92,6 +92,7 @@ export const hero: Field = {
         maxRows: 2,
       },
     }),
+
     {
       name: 'media',
       type: 'upload',

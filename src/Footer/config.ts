@@ -10,16 +10,63 @@ export const Footer: GlobalConfig = {
   },
   fields: [
     {
-      name: 'navItems',
+      label: 'Navigation',
+      name: 'navigation',
       type: 'array',
-      fields: [link({})],
-      maxRows: 6,
+      maxRows: 3,
+      fields: [
+        {
+          label: 'Navigation Title',
+          name: 'navTitle',
+          type: 'text',
+        },
+        {
+          name: 'navLinks',
+          type: 'array',
+          fields: [link({})],
+        },
+      ],
       admin: {
         initCollapsed: true,
         components: {
           RowLabel: '@/Footer/RowLabel#RowLabel',
         },
       },
+    },
+    {
+      name: 'navItems',
+      type: 'array',
+      fields: [link({})],
+      maxRows: 6,
+      // admin: {
+      //   initCollapsed: true,
+      //   components: {
+      //     RowLabel: '@/Footer/RowLabel#RowLabel',
+      //   },
+      // },
+    },
+    {
+      name: 'socialMediaLinks',
+      label: 'Social Media Links',
+      type: 'array',
+      fields: [
+        {
+          name: 'icon',
+          type: 'select',
+          options: ['Instagram', 'Twitter', 'Facebook', 'LinkedIn', 'Github'],
+          required: true,
+        },
+        {
+          name: 'url',
+          type: 'text',
+          required: true,
+        },
+      ],
+    },
+    {
+      name: 'contactInfo',
+      label: 'Contact Information',
+      type: 'text',
     },
   ],
   hooks: {

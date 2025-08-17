@@ -14,7 +14,7 @@ export const Card: React.FC<{
   alignItems?: 'center'
   className?: string
   doc?: CardPostData
-  relationTo?: 'posts'
+  relationTo?: 'blog'
   showCategories?: boolean
   title?: string
 }> = (props) => {
@@ -69,15 +69,19 @@ export const Card: React.FC<{
           </div>
         )}
         {titleToUse && (
-          <div className="prose">
+          <div className="">
             <h3>
-              <Link className="not-prose" href={href} ref={link.ref}>
+              <Link className="font-semibold hover:text-primary" href={href} ref={link.ref}>
                 {titleToUse}
               </Link>
             </h3>
           </div>
         )}
-        {description && <div className="mt-2">{description && <p>{sanitizedDescription}</p>}</div>}
+        {description && (
+          <div className="mt-2 text-muted-foreground">
+            {description && <p>{sanitizedDescription}</p>}
+          </div>
+        )}
       </div>
     </article>
   )

@@ -149,10 +149,10 @@ export interface Page {
   id: string;
   title: string;
   hero: {
-    type: 'none' | 'landing' | 'highImpact' | 'mediumImpact' | 'lowImpact';
-    badge?: string | null;
-    title?: string | null;
-    subTitle?: string | null;
+    type: 'none' | 'landingHero' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    landingBadge?: string | null;
+    landingTitle?: string | null;
+    landingSubtitle?: string | null;
     richText?: {
       root: {
         type: string;
@@ -1002,9 +1002,9 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         type?: T;
-        badge?: T;
-        title?: T;
-        subTitle?: T;
+        landingBadge?: T;
+        landingTitle?: T;
+        landingSubtitle?: T;
         richText?: T;
         links?:
           | T
@@ -1592,6 +1592,36 @@ export interface Header {
  */
 export interface Footer {
   id: string;
+  navigation?:
+    | {
+        navTitle?: string | null;
+        navLinks?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: string | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+                /**
+                 * Choose how the link should be rendered.
+                 */
+                appearance?: ('default' | 'ghost' | 'outline' | 'link' | 'star') | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
   navItems?:
     | {
         link: {
@@ -1616,6 +1646,14 @@ export interface Footer {
         id?: string | null;
       }[]
     | null;
+  socialMediaLinks?:
+    | {
+        icon: 'Instagram' | 'Twitter' | 'Facebook' | 'LinkedIn' | 'Github';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  contactInfo?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1649,6 +1687,27 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  navigation?:
+    | T
+    | {
+        navTitle?: T;
+        navLinks?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
   navItems?:
     | T
     | {
@@ -1664,6 +1723,14 @@ export interface FooterSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  socialMediaLinks?:
+    | T
+    | {
+        icon?: T;
+        url?: T;
+        id?: T;
+      };
+  contactInfo?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

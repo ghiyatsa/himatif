@@ -1,43 +1,27 @@
-import type { Metadata } from 'next'
-
 import { Figtree } from 'next/font/google'
-
+import type { Metadata } from 'next'
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { getServerSideURL } from '@/utilities/getURL'
 const figtree = Figtree({
   subsets: ['latin'],
+  variable: '--figtre',
 })
-
+import './globals.css'
 import { cn } from '@/utilities/ui'
 import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
-import React from 'react'
-
-import { AdminBar } from '@/components/AdminBar'
-import { Footer } from '@/Footer/Component'
-import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import { draftMode } from 'next/headers'
+import { Header } from '@/Header/Component'
+import { Footer } from '@/Footer/Component'
 
-import './globals.css'
-import { getServerSideURL } from '@/utilities/getURL'
-
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const { isEnabled } = await draftMode()
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html className={cn(figtree.className, GeistMono.variable)} lang="en" suppressHydrationWarning>
       <head>
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
-        {/* <link href="/favicon.svg" rel="icon" type="image/svg+xml" /> */}
+        <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
       <body>
         <Providers>
-          {/* <AdminBar
-            adminBarProps={{
-              preview: isEnabled,
-            }}
-          /> */}
-
           <Header />
           {children}
           <Footer />

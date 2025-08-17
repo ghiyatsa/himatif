@@ -4,16 +4,14 @@ import React from 'react'
 
 import type { Header as HeaderType } from '@/payload-types'
 
-import { CMSLink } from '@/components/Link'
+import { NavigationLinks } from './NavigationLinks'
 
 export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
-  const navItems = data?.navItems || []
-
   return (
-    <nav className="flex items-center gap-1">
-      {navItems.map(({ link }, i) => {
-        return <CMSLink key={i} {...link} appearance="ghost" size={'sm'} className="font-normal" />
-      })}
-    </nav>
+    <NavigationLinks
+      navItems={data.navItems}
+      className="lg:flex gap-6 hidden"
+      linkClassName="duration-200 hover:-translate-y-0.5 hover:text-primary font-medium hover:scale-105"
+    />
   )
 }
